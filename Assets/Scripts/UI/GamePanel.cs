@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class GamePanel : MonoBehaviour
 {
-    public Text nameTxt; //名字文本
     public Text dialogueTxt; //对话文本
     public Text leftInfoTxt; //左边对话文本
     public Text rightInfoTxt; //右边对话文本
+    public Text midInfoTxt; //中间对话文本
     public Image TxtMask; //对话遮罩
+
+    public Text eventInfoTxt; //事件信息文本
     
     //Stats
     public Image supportMask; //民心滑动条
@@ -39,22 +41,26 @@ public class GamePanel : MonoBehaviour
     public void ShowLorR(bool isRight)
     {
         TxtMask.gameObject.SetActive(true);
-        if (isRight) rightInfoTxt.gameObject.SetActive(true);
-        else leftInfoTxt.gameObject.SetActive(true);
+        /*if (isRight) rightInfoTxt.gameObject.SetActive(true);
+        else leftInfoTxt.gameObject.SetActive(true);*/
+        midInfoTxt.gameObject.SetActive(true);
+        if (isRight) midInfoTxt.text = rightInfoTxt.text;
+        else midInfoTxt.text = leftInfoTxt.text;
+        if (midInfoTxt.text == "") TxtMask.gameObject.SetActive(false);
     }
 
     //隐藏对话框和两侧文字
     public void HideLandR()
     {
         TxtMask.gameObject.SetActive(false);
-        leftInfoTxt.gameObject.SetActive(false);
-        rightInfoTxt.gameObject.SetActive(false);
+        /*leftInfoTxt.gameObject.SetActive(false);
+        rightInfoTxt.gameObject.SetActive(false);*/
+        midInfoTxt.gameObject.SetActive(false);
     }
 
     //更新人物对话
     public void UpdateTxt()
     {
-        nameTxt.text = MainMgr.Instance.speaker;
         dialogueTxt.text = MainMgr.Instance.dialogue;
         leftInfoTxt.text = MainMgr.Instance.leftInfo;
         rightInfoTxt.text = MainMgr.Instance.rightInfo;
@@ -63,19 +69,32 @@ public class GamePanel : MonoBehaviour
     //更新上方Buff栏
     public void UpdateBuff()
     {
+        buff1.sprite = null;
         string res = "Buff/";
         for (int i = 1;i <= MainMgr.Instance.buffs.Count; i++)
         {
             switch (i) 
             {
-                case 1: buff1.sprite = Resources.Load<Sprite>(res + MainMgr.Instance.buffs[i - 1]); break;
-                case 2: buff2.sprite = Resources.Load<Sprite>(res + MainMgr.Instance.buffs[i - 1]); break;
-                case 3: buff3.sprite = Resources.Load<Sprite>(res + MainMgr.Instance.buffs[i - 1]); break;
-                case 4: buff4.sprite = Resources.Load<Sprite>(res + MainMgr.Instance.buffs[i - 1]); break;
+                case 1: buff1.sprite = Resources.Load<Sprite>(res + i); break;
+                case 2: buff2.sprite = Resources.Load<Sprite>(res + i); break;
+                case 3: buff3.sprite = Resources.Load<Sprite>(res + i); break;
+                case 4: buff4.sprite = Resources.Load<Sprite>(res + i); break;
             }
-
             
         }
+        for (int j = MainMgr.Instance.buffs.Count; j <= 4; j++)
+        {
+            if (j <= 3) buff4.sprite = null;
+            if (j <= 2) buff3.sprite = null;
+            if (j <= 1) buff2.sprite = null;
+            if (j <= 0) buff1.sprite = null;
+        }
+    }
+
+    //更新事件文本
+    public void UpdateEventText()
+    {
+        eventInfoTxt.text = MainMgr.Instance.eventInfo;
     }
 
 
@@ -133,7 +152,6 @@ public class GamePanel : MonoBehaviour
             StatsBarChange(3, armyMask, ref preArmy, currArmy, deltaVal);
             StatsBarChange(4, moneyMask, ref preMoney, currMoney, deltaVal);
             StatsBarChange(5, decayMask, ref preDecay, currDecay, deltaVal);
-            for(int i = 0;i < isFinish.Length;i++) print(i+" "+isFinish[i]);
 
             yield return new WaitForSeconds(0.01f);
         }
@@ -154,7 +172,6 @@ public class GamePanel : MonoBehaviour
     /// <param name="endVal">进度条目标值</param>
     private void StatsBarChange(int i ,Image bar, ref float initVal, float endVal,float deltaVal)
     {
-        print(initVal + " " + endVal);
         bar.fillAmount = initVal / 100;
         if (initVal  < endVal - 1)
         {

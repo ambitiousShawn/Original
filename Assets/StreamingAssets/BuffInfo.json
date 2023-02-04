@@ -1,0 +1,22 @@
+[
+    {
+        "id": 0,
+        "interval": 0,
+        "support": 0,
+        "food": 0,
+        "prestige": 0,
+        "army": 0,
+        "money": 0,
+        "decay": 0
+    },
+    {
+        "id": 1,
+        "interval": 3,
+        "support": 1,
+        "food": -1,
+        "prestige": 1,
+        "army": 1,
+        "money": 1,
+        "decay": 1
+    }
+]

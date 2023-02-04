@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardInfo 
+public class EventsInfo 
 {
     public int id;
-    public string name;
-    public string dialogue;
-    public string leftInfo;
-    public string rightInfo;
+    public string info;
+    public int back;
     public int support;
     public int food;
     public int prestige;

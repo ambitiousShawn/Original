@@ -2,11 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BuffType
-{
-    
-}
-
 public class MainMgr : MonoBehaviour
 {
     #region 单例模式
@@ -22,7 +17,7 @@ public class MainMgr : MonoBehaviour
     public GamePanel gamePanel;
 
     //当前玩家所在的位置pos
-    public int pos;
+    public int pos ;
 
     //一些全局变量
     public string speaker;  //当前说话人姓名
@@ -32,15 +27,83 @@ public class MainMgr : MonoBehaviour
     public static string RES = "Card/"; //卡牌的贴图路径保证为 “Resources/Card/” + pos 即可
     public int support, food, prestige, army, money, decay; //当前各项指标
 
-    public List<string> buffs = new List<string>();
+    public int currleftJump, currRightJump;
 
+    public string eventInfo; //当前事件内容
+
+    public List<BuffInfo> buffs = new List<BuffInfo>();
+    int[] buffTime = new int[4];
+       
     private void Start()
     {
         pos = 1;
-        support = food = prestige = army = money = 50;
-        decay = 40;
+        support = food = prestige = army = money = 20;
+        decay = 20;
         InitCurrCard();
+
     }
+
+    #region Buff模块
+    /// <summary>
+    /// 给玩家添加一个buff：
+    ///     1.获取到对应类型buff数据
+    ///     2.将其加入buffs集合中
+    ///     3.更新显示UI
+    /// </summary>
+    /// <param name="type"></param>
+    public void AddBuff(int type)
+    {
+        BuffInfo buffInfo = DataMgr.Instance.buffInfos[type];
+        
+        bool isExist = false;
+        //如果buffs中数值存在
+        for (int i = 0;i < buffs.Count; i++)
+        {
+            if (buffs[i].id == buffInfo.id)
+            {
+                isExist = true;
+                buffTime[i] = buffInfo.interval;
+                break;
+            }   
+        }
+        //如果不存在
+        if (!isExist)
+        {
+            buffs.Add(buffInfo);
+            buffTime[buffs.Count] = buffInfo.interval;
+        }
+        
+        gamePanel.UpdateBuff();
+    }
+
+    //在卡牌初始化结算Buff
+    public void BuffTrigger()
+    {
+        if (buffs.Count == 0) return;
+
+        //遍历buff栏中所有buff
+        for (int i = 0;i < buffs.Count; i++)
+        {
+            if (buffTime[i] > 0)
+            {
+                support += buffs[i].support;
+                food += buffs[i].food;
+                prestige += buffs[i].prestige;
+                army += buffs[i].army;
+                money += buffs[i].money;
+                decay += buffs[i].decay;
+                buffTime[i]--;
+            }
+            if (buffTime[i] == 0)
+            {
+                buffs.Remove(buffs[i]);
+            }
+        }
+        foreach (var v in buffs) print(v);
+        gamePanel.UpdateBuff();
+        
+    }
+    #endregion
 
     /// <summary>
     /// 对当前卡牌进行初始化
@@ -51,6 +114,7 @@ public class MainMgr : MonoBehaviour
     public void InitCurrCard()
     {
         CardInfo info = DataMgr.Instance.infos[pos]; //当前位置卡片数据
+        print(info.leftJump + " " + info.rightJump);
         //更新数值
         speaker = info.name;
         dialogue = info.dialogue;
@@ -62,8 +126,11 @@ public class MainMgr : MonoBehaviour
         army += info.army;
         money += info.money;
         decay += info.decay;
+        currleftJump = info.leftJump;
+        currRightJump = info.rightJump;
         //更新UI
         gamePanel.UpdateTxt();
         gamePanel.UpdateStatsAndBar();
     }
 }
+
