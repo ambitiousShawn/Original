@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMgr : MonoBehaviour
 {
@@ -29,18 +30,60 @@ public class MainMgr : MonoBehaviour
 
     public int currleftJump, currRightJump;
 
-    public string eventInfo; //当前事件内容
-
     public List<BuffInfo> buffs = new List<BuffInfo>();
     int[] buffTime = new int[4];
        
     private void Start()
     {
+        AudioManager.Instance.PlayBGM("BGM1");
         pos = 1;
         support = food = prestige = army = money = 20;
         decay = 20;
         InitCurrCard();
 
+    }
+
+    /// <summary>
+    /// 游戏结束条件以及特殊事件触发方式
+    /// 1.游戏结束条件：
+    ///     ① 威望低于20
+    ///     ② 任意值低于0（除腐败）
+    /// 2.特殊事件
+    ///     ① pos = 35 || 36，龙Buff
+    ///     ② pos = 52 || 53，干旱Buff
+    ///     ③ pos = 86 ，战乱Buff
+    ///     ④ pos = 103 ， 风调雨顺Buff
+    ///     ⑤ pos = 126 , 战乱Buff
+    ///     ⑥ 腐朽 > 50 ，腐朽Buff
+    /// </summary>
+    private void Update()
+    {
+        GameOver();
+        GeneratorBuff();
+    }
+
+    //结束条件
+    private void GameOver()
+    {
+        if (prestige < 20) ;//触发结局CG
+        if (support <= 0 || food <= 0 || army <= 0 || money <= 0) ; //触发结局CG
+    }
+
+    /// <summary>
+    /// 生成Buff：
+    ///  1.将贴图赋值给TempBuff
+    ///  2.播放生成动画
+    ///  3.在生成动画结尾调用动画事件
+    /// </summary>
+    private void GeneratorBuff()
+    {
+        if (pos == 35 || pos == 36) AddBuff(1);
+
+        else if (pos == 52 || pos == 53) AddBuff(1); //干旱
+        else if (pos == 86 || pos == 126) AddBuff(1); //战乱
+        else if (pos == 103) AddBuff(1); // 风调雨顺
+
+        if (decay >= 50) AddBuff(1); //腐朽
     }
 
     #region Buff模块
@@ -99,7 +142,6 @@ public class MainMgr : MonoBehaviour
                 buffs.Remove(buffs[i]);
             }
         }
-        foreach (var v in buffs) print(v);
         gamePanel.UpdateBuff();
         
     }

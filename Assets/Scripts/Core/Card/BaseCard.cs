@@ -58,12 +58,9 @@ public abstract class BaseCard : MonoBehaviour
             Input.GetMouseButtonDown(0))
         {
             anim.SetTrigger("Fall");
-            //if (MainMgr.Instance.pos == 22) print(MainMgr.Instance.currleftJump + " " + MainMgr.Instance.currRightJump);
             //决策树遍历
             if (anim.GetBool("isLeft")) MainMgr.Instance.pos = MainMgr.Instance.currleftJump;
             else MainMgr.Instance.pos = MainMgr.Instance.pos = MainMgr.Instance.currRightJump ;
-            print(MainMgr.Instance.pos);
-
         }
     }
 }

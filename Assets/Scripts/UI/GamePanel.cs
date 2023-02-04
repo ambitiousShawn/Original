@@ -10,8 +10,6 @@ public class GamePanel : MonoBehaviour
     public Text rightInfoTxt; //右边对话文本
     public Text midInfoTxt; //中间对话文本
     public Image TxtMask; //对话遮罩
-
-    public Text eventInfoTxt; //事件信息文本
     
     //Stats
     public Image supportMask; //民心滑动条
@@ -89,12 +87,6 @@ public class GamePanel : MonoBehaviour
             if (j <= 1) buff2.sprite = null;
             if (j <= 0) buff1.sprite = null;
         }
-    }
-
-    //更新事件文本
-    public void UpdateEventText()
-    {
-        eventInfoTxt.text = MainMgr.Instance.eventInfo;
     }
 
 
