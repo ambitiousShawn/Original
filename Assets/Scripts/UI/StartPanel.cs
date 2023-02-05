@@ -7,6 +7,8 @@ public class StartPanel : MonoBehaviour
 {
     public Button startGame; //开始游戏
 
+    public Image tips; //提示面板
+
     void Start()
     {
         startGame.onClick.AddListener(() =>
@@ -17,6 +19,13 @@ public class StartPanel : MonoBehaviour
 
             });
         });
+
+        Invoke("DelayHide", 3f);
+    }
+
+    private void DelayHide()
+    {
+        tips.gameObject.SetActive(false);
     }
 
     void Update()

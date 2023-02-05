@@ -5,7 +5,9 @@ using UnityEngine;
 public class BuffInfo 
 {
     public int id;
-    public int interval;
+    public string name;
+    public int triggerTime;
+    public int times;
     public int support;
     public int food;
     public int prestige;

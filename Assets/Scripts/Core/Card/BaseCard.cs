@@ -16,12 +16,11 @@ public abstract class BaseCard : MonoBehaviour
     {
         //组件初始化
         anim = GetComponent<Animator>();
-        MainMgr.Instance.AddBuff(1);
-        MainMgr.Instance.AddBuff(1);
     }
 
     protected virtual void Update()
     {
+        if (!MainMgr.Instance.canMove) return;
         CardSwing();
         CardClick();
     }

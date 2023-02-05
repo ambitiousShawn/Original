@@ -8,10 +8,13 @@ public class DataMgr : Singleton<DataMgr>
     public List<CardInfo> infos = new List<CardInfo>();
     //Buff数据
     public List<BuffInfo> buffInfos = new List<BuffInfo>();
+    //CG数据
+    public List<CGInfo> cgInfos = new List<CGInfo>();
     
     public DataMgr()
     {
         infos = JsonMgr.Instance.LoadData<List<CardInfo>>("CardInfo");
         buffInfos = JsonMgr.Instance.LoadData<List<BuffInfo>>("BuffInfo");
+        cgInfos = JsonMgr.Instance.LoadData<List<CGInfo>>("CGInfo");
     }
 }

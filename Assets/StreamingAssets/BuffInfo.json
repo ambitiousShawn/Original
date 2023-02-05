@@ -1,7 +1,9 @@
 [
     {
         "id": 0,
-        "interval": 0,
+        "name": "NULL",
+        "triggerTime": 0,
+        "times": 0,
         "support": 0,
         "food": 0,
         "prestige": 0,
@@ -11,12 +13,62 @@
     },
     {
         "id": 1,
-        "interval": 3,
-        "support": 1,
-        "food": -1,
-        "prestige": 1,
-        "army": 1,
-        "money": 1,
-        "decay": 1
+        "name": "¾ÞÁúÖ®Íþ",
+        "triggerTime": 37,
+        "times": 4,
+        "support": 3,
+        "food": 3,
+        "prestige": 3,
+        "army": 3,
+        "money": 3,
+        "decay": 0
+    },
+    {
+        "id": 2,
+        "name": "¸Éºµ",
+        "triggerTime": 52,
+        "times": 5,
+        "support": 0,
+        "food": -5,
+        "prestige": 0,
+        "army": 0,
+        "money": -5,
+        "decay": 0
+    },
+    {
+        "id": 3,
+        "name": "·çµ÷ÓêË³",
+        "triggerTime": 103,
+        "times": 5,
+        "support": 2,
+        "food": 5,
+        "prestige": 2,
+        "army": 0,
+        "money": 5,
+        "decay": 0
+    },
+    {
+        "id": 4,
+        "name": "Õ½ÂÒ",
+        "triggerTime": 85,
+        "times": 10,
+        "support": -4,
+        "food": -4,
+        "prestige": 0,
+        "army": -4,
+        "money": -4,
+        "decay": 0
+    },
+    {
+        "id": 5,
+        "name": "¸¯°Ü",
+        "triggerTime": 0,
+        "times": 5,
+        "support": -5,
+        "food": -5,
+        "prestige": -5,
+        "army": -5,
+        "money": -5,
+        "decay": -4
     }
 ]

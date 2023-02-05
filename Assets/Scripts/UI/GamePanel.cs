@@ -26,11 +26,12 @@ public class GamePanel : MonoBehaviour
     public Text moneyTxt;
     public Text decayTxt;
 
-    //Buff栏
-    public Image buff1;
-    public Image buff2;
-    public Image buff3;
-    public Image buff4;
+    //可能删
+    public Transform buffFrame;
+
+    //CGMask
+    public GameObject cgmask;
+    public Image resImg;
 
     //渐变是否完成
     bool[] isFinish = new bool[6];
@@ -64,8 +65,8 @@ public class GamePanel : MonoBehaviour
         rightInfoTxt.text = MainMgr.Instance.rightInfo;
     }
 
-    //更新上方Buff栏
-    public void UpdateBuff()
+    /*//更新上方Buff栏
+    public void UpdateBuff1()
     {
         buff1.sprite = null;
         string res = "Buff/";
@@ -87,6 +88,15 @@ public class GamePanel : MonoBehaviour
             if (j <= 1) buff2.sprite = null;
             if (j <= 0) buff1.sprite = null;
         }
+    }*/
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void UpdateCGInfo()
+    {
+        resImg.gameObject.SetActive(true);
+        resImg.sprite = Resources.Load<Sprite>("CG/" + MainMgr.Instance.cgId);
     }
 
 
@@ -180,4 +190,6 @@ public class GamePanel : MonoBehaviour
             isFinish[i] = true;
         }
     }
+
+    
 }

@@ -16,7 +16,6 @@ public class FrontCard : BaseCard
         MainMgr.Instance.BuffTrigger(); //Buff触发
         int currPos = MainMgr.Instance.pos;
         GetComponent<Image>().sprite = Resources.Load<Sprite>("Card/" + DataMgr.Instance.infos[currPos].name);
-        print(GetComponent<Image>().sprite);
         if (GetComponent<Image>().sprite == null)
             GetComponent<Image>().sprite = Resources.Load<Sprite>("Card/空木签");
         AudioManager.Instance.PlaySound("木签");

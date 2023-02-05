@@ -32,13 +32,21 @@ public class MainMgr : MonoBehaviour
 
     public List<BuffInfo> buffs = new List<BuffInfo>();
     int[] buffTime = new int[4];
-       
+
+    //禁止玩家操作
+    public bool canMove;
+
+    //结局CG数据
+    public int cgId;
+    public string cgDia;
+
     private void Start()
     {
         AudioManager.Instance.PlayBGM("BGM1");
         pos = 1;
-        support = food = prestige = army = money = 20;
+        support = food = prestige = army = money = 30;
         decay = 20;
+        canMove = true;
         InitCurrCard();
 
     }
@@ -60,13 +68,64 @@ public class MainMgr : MonoBehaviour
     {
         GameOver();
         GeneratorBuff();
+
+        InputKey();
+        PlaySoundOnGame();
+    }
+
+    //播放音效
+    private void PlaySoundOnGame()
+    {
+            if (pos == 136) AudioManager.Instance.PlaySound("BGM3");
+    }
+
+    // 输入按键
+    private void InputKey()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ScenesManager.Instance.LoadSceneAsync("0_Start", () => { });
+        }
     }
 
     //结束条件
     private void GameOver()
     {
-        if (prestige < 20) ;//触发结局CG
-        if (support <= 0 || food <= 0 || army <= 0 || money <= 0) ; //触发结局CG
+        if (support <= 0)
+        {
+            CGInfo info = DataMgr.Instance.cgInfos[1];
+            cgId = info.id;
+            cgDia = info.dialogue;
+            gamePanel.cgmask.SetActive(true);
+        }
+        if (food <= 0)
+        {
+            CGInfo info = DataMgr.Instance.cgInfos[2];
+            cgId = info.id;
+            cgDia = info.dialogue;
+            gamePanel.cgmask.SetActive(true);
+        }
+        if (prestige < 20)
+        {
+            CGInfo info = DataMgr.Instance.cgInfos[3];
+            cgId = info.id;
+            cgDia = info.dialogue;
+            gamePanel.cgmask.SetActive(true);
+        }
+        if (army <= 0)
+        {
+            CGInfo info = DataMgr.Instance.cgInfos[4];
+            cgId = info.id;
+            cgDia = info.dialogue;
+            gamePanel.cgmask.SetActive(true);
+        }
+        if (money <= 0)
+        {
+            CGInfo info = DataMgr.Instance.cgInfos[5];
+            cgId = info.id;
+            cgDia = info.dialogue;
+            gamePanel.cgmask.SetActive(true);
+        }
     }
 
     /// <summary>
@@ -77,13 +136,13 @@ public class MainMgr : MonoBehaviour
     /// </summary>
     private void GeneratorBuff()
     {
-        if (pos == 35 || pos == 36) AddBuff(1);
+        if (pos == 37) AddBuff(1); //龙
 
-        else if (pos == 52 || pos == 53) AddBuff(1); //干旱
-        else if (pos == 86 || pos == 126) AddBuff(1); //战乱
-        else if (pos == 103) AddBuff(1); // 风调雨顺
+        else if (pos == 52 || pos == 53) AddBuff(2); //干旱
+        else if (pos == 86 || pos == 124 || pos == 123) AddBuff(4); //战乱
+        else if (pos == 103) AddBuff(3); // 风调雨顺
 
-        if (decay >= 50) AddBuff(1); //腐朽
+        if (decay >= 50) AddBuff(5); //腐朽
     }
 
     #region Buff模块
@@ -96,7 +155,7 @@ public class MainMgr : MonoBehaviour
     /// <param name="type"></param>
     public void AddBuff(int type)
     {
-        BuffInfo buffInfo = DataMgr.Instance.buffInfos[type];
+        BuffInfo buffInfo = DataMgr.Instance.buffInfos[type]; //读取指定类型buff的数据
         
         bool isExist = false;
         //如果buffs中数值存在
@@ -105,7 +164,7 @@ public class MainMgr : MonoBehaviour
             if (buffs[i].id == buffInfo.id)
             {
                 isExist = true;
-                buffTime[i] = buffInfo.interval;
+                buffTime[i] = buffInfo.times;
                 break;
             }   
         }
@@ -113,10 +172,19 @@ public class MainMgr : MonoBehaviour
         if (!isExist)
         {
             buffs.Add(buffInfo);
-            buffTime[buffs.Count] = buffInfo.interval;
+            buffTime[buffs.Count] = buffInfo.times;
+            
+            //激活临时卡牌，并修改信息
+            canMove = false;
+            GameObject tempBuff = ResourcesManager.Instance.Load<GameObject>("Buff/TempBuff");
+            tempBuff.transform.SetParent(gamePanel.transform);
+            tempBuff.GetComponent<Image>().sprite = Resources.Load<Sprite>("Buff/" + buffInfo.id);
+            tempBuff.GetComponentInChildren<Text>().text = buffInfo.name;
+            tempBuff.GetComponent<Animator>().Play("Gen");
+            tempBuff.name = "tempBuff" + buffs.Count;
         }
         
-        gamePanel.UpdateBuff();
+        //gamePanel.UpdateBuff1();
     }
 
     //在卡牌初始化结算Buff
@@ -130,20 +198,27 @@ public class MainMgr : MonoBehaviour
             if (buffTime[i] > 0)
             {
                 support += buffs[i].support;
+                if (support > 100) support = 100;
                 food += buffs[i].food;
+                if (food > 100) food = 100;
                 prestige += buffs[i].prestige;
+                if (prestige > 100) prestige = 100;
                 army += buffs[i].army;
+                if (army > 100) army= 100;
                 money += buffs[i].money;
+                if (money> 100) money= 100;
                 decay += buffs[i].decay;
+                if (decay> 100) decay= 100;
                 buffTime[i]--;
             }
             if (buffTime[i] == 0)
             {
                 buffs.Remove(buffs[i]);
+                Destroy(gamePanel.buffFrame.Find("tempBuff" + (i + 1)).gameObject);
             }
         }
-        gamePanel.UpdateBuff();
-        
+        //gamePanel.UpdateBuff1();
+       
     }
     #endregion
 
@@ -163,11 +238,17 @@ public class MainMgr : MonoBehaviour
         leftInfo = info.leftInfo;
         rightInfo = info.rightInfo;
         support += info.support;
+        if (support > 100) support = 100;
         food += info.food;
+        if (food > 100) food = 100;
         prestige += info.prestige;
+        if (prestige > 100) prestige = 100;
         army += info.army;
+        if (army > 100) army = 100;
         money += info.money;
+        if (money > 100) money = 100;
         decay += info.decay;
+        if (decay > 100) decay = 100;
         currleftJump = info.leftJump;
         currRightJump = info.rightJump;
         //更新UI
