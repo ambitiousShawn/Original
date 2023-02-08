@@ -336,10 +336,10 @@
         "leftInfo": "是个好主意",
         "rightInfo": "我另有打算",
         "support": 10,
-        "food": 10,
-        "prestige": 10,
-        "army": 10,
-        "money": 10,
+        "food": 15,
+        "prestige": 15,
+        "army": 15,
+        "money": 15,
         "decay": 0,
         "leftJump": 23,
         "rightJump": 24
@@ -2021,8 +2021,8 @@
         "army": 0,
         "money": 0,
         "decay": 0,
-        "leftJump": 134,
-        "rightJump": 134
+        "leftJump": 135,
+        "rightJump": 135
     },
     {
         "id": 135,

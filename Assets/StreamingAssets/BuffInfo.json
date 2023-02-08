@@ -16,7 +16,7 @@
         "name": "¾ÞÁúÖ®Íþ",
         "triggerTime": 37,
         "times": 4,
-        "support": 3,
+        "support": 4,
         "food": 3,
         "prestige": 3,
         "army": 3,
@@ -41,10 +41,10 @@
         "triggerTime": 103,
         "times": 5,
         "support": 2,
-        "food": 5,
+        "food": 8,
         "prestige": 2,
-        "army": 0,
-        "money": 5,
+        "army": 2,
+        "money": 8,
         "decay": 0
     },
     {
@@ -53,10 +53,10 @@
         "triggerTime": 85,
         "times": 10,
         "support": -4,
-        "food": -4,
+        "food": -3,
         "prestige": 0,
         "army": -4,
-        "money": -4,
+        "money": -3,
         "decay": 0
     },
     {
@@ -64,11 +64,11 @@
         "name": "¸¯°Ü",
         "triggerTime": 0,
         "times": 5,
-        "support": -5,
-        "food": -5,
-        "prestige": -5,
-        "army": -5,
-        "money": -5,
+        "support": -4,
+        "food": -4,
+        "prestige": -4,
+        "army": -4,
+        "money": -4,
         "decay": -4
     }
 ]

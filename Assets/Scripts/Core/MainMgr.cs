@@ -45,6 +45,7 @@ public class MainMgr : MonoBehaviour
         AudioManager.Instance.PlayBGM("BGM1");
         pos = 1;
         support = food = prestige = army = money = 30;
+        food = money = 40;
         decay = 20;
         canMove = true;
         InitCurrCard();
@@ -122,6 +123,21 @@ public class MainMgr : MonoBehaviour
         if (money <= 0)
         {
             CGInfo info = DataMgr.Instance.cgInfos[5];
+            cgId = info.id;
+            cgDia = info.dialogue;
+            gamePanel.cgmask.SetActive(true);
+        }
+        if (pos == 153)
+        {
+            CGInfo info = DataMgr.Instance.cgInfos[6];
+            cgId = info.id;
+            cgDia = info.dialogue;
+            gamePanel.cgmask.SetActive(true);
+        }
+
+        if (pos == 152)
+        {
+            CGInfo info = DataMgr.Instance.cgInfos[7];
             cgId = info.id;
             cgDia = info.dialogue;
             gamePanel.cgmask.SetActive(true);
